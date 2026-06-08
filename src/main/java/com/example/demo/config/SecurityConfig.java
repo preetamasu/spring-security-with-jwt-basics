@@ -26,8 +26,8 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(authorize-> authorize.requestMatchers("/auth/**").permitAll().anyRequest()
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+            http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(authorize-> authorize.requestMatchers("/auth/**").permitAll().anyRequest()
                 .authenticated()).sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthfilter, UsernamePasswordAuthenticationFilter.class);
