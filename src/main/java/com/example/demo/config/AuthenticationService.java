@@ -7,6 +7,8 @@ import com.example.demo.user.Role;
 import com.example.demo.user.User;
 import com.example.demo.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +23,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
 
+    @CachePut(value="PRODUCT_CACHE", key="#result.id()")
     public User signUp(RegisterDTO input){
         User user = new User();
         user.setEmail(input.username());
@@ -32,6 +35,7 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
+    @Cacheable(value ="PRODUCT_CACHE", key="#result.id()")
     public User authenticate(LoginUserDTO userDTO){
         User user = userRepository.findByEmail(userDTO.email()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
